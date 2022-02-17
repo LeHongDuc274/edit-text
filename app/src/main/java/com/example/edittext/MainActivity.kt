@@ -19,9 +19,11 @@ class MainActivity : AppCompatActivity() {
         edt.filters = arrayOf()
         edt.addTextChangedListener(object : TextWatcher {
             var beforLent = 0
+            var beforChars = ""
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 p0?.let {
                     beforLent = it.length
+                    beforChars = it.toString()
                 }
             }
 
@@ -31,10 +33,15 @@ class MainActivity : AppCompatActivity() {
                 var afterLent = 0
                 p0?.let { e ->
                     afterLent = e.length
-                    if (afterLent == 21 && beforLent < afterLent) {
+                    if (afterLent == 21 && beforLent <= afterLent) {
                         edt.filters = arrayOf(InputFilter.LengthFilter(20))
-                        edt.setText(p0.delete(20, p0.length))
-                        edt.setSelection(edt.length())
+                        if ( edt.selectionStart ==21) { //
+                            edt.setText(p0.delete(20, p0.length))
+                            edt.setSelection(edt.length())
+                        } else {
+                            edt.setText(beforChars)
+                            edt.setSelection(edt.length())
+                        }
                         tv.setTextColor(Color.BLUE)
                         tv.text = " ${edt.text.length} / 20 kí tự"
 
